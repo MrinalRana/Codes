@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link href="MrinalCss/JoinUs.css" rel="stylesheet">
+    <link href="normalize.css" rel="stylesheet">
+    <link rel="icon" href="MrinalImages/favicon.png" type="image">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+    <title>Join Us</title>
+    </head>
+    <body>
+      
+        
+        <div class="subHeading">
+            <h2>Web Development, Website Design, Website Maintenance & Website Serivces since 2018</h2></div>
+        
+<div class="columns">
+<div class="homepage-services">
+<div class="promo-boxes">
+    
+    <div id="first">
+    <div class="one-fourth column">
+        <div class="promo-image-holder">
+            <img width="30px" height="30px" src="MrinalImages/webdev.jpg" alt="Web Development" /></div>
+        <h2 class="title"><a href="AboutUs.html">Web Development</a></h2>
+        <div class="description"><p>At Tinder in Toronto we develop custom web solutions for our clients. We specialise in Open Source website development and web application development.</p>
+</div><h3 class="readMore"><a href="ContactUs.html">Get in touch</a></h3></div></div>
+    
+    <div class="second">
+    <div class="one-fourth column">
+        <div class="promo-image-holder">
+            <img width="30px" height="30px" src="MrinalImages/webdes.jpg" alt="Website Design" /></div>
+        <h2 class="title"><a href="AboutUs.html">Website Design</a></h2>
+        <div class="description"><p>Tinder are leading Web Designers in Toronto, Canada. We deliver beautifully crafted custom website designs for a growing portfolio of customers.</p>
+</div><h3 class="readMore"><a href="ContactUs.html">Get in touch</a></h3></div></div>
+    
+    <div class="third">
+    <div class="one-fourth column">
+        <div class="promo-image-holder" id="thirdImage">
+            <img width="30px" height="30px" src="MrinalImages/webmain.jpg" alt="Website Maintenance" /></div>
+        <h2 class="title"><a href="AboutUs.html">Web Maintenance</a></h2>
+        <div class="description"><p>Tinder build remarkable online experiences, also offer website maintenance services because we know site maintenance is essential to maximizing your online performance.</p>
+        </div><h3 class="readMore"><a href="ContactUs.html">Get in touch</a></h3></div></div>
+    
+    <div class="fourth">
+    <div class="one-fourth column" id="second">
+        <div class="promo-image-holder">
+            <img width="30px" height="30px" src="MrinalImages/webser.jpg" alt="Hosting & Email Services" /></div>
+        <h2 class="title"><a href="AboutUs.html">Website Services</a></h2>
+        <div class="description"><p> Your website isn’t mobile friendly, outdated or simply isn’t up to your satisfaction, you need professional web design services from Tinder that makes the process easy.</p>
+        </div><h3 class="readMore"><a href="ContactUs.html">Get in touch</a></h3></div></div></div>
+    </div></div>
+        
+          <section id="firstImage" class="firstSection">
+  <div class="background-class">
+    <div class="text-class">
+    <h1>Join Tinder</h1>
+    <p>Best-in-Class Website Design & Development for Medium-Large Enterprises and Organizations</p>
+    </div>
+  </div>
+</section>
+        
+        <div class="signup">
+        <form action="MAILTO:mrinalrana@e-mail.com?subject=New Message from Client" id="form" name="form" method="post">
+            
+            <h4>Join Us Form</h4>
+            
+            <div class="form">
+                <label>
+            Name : <input type="text" id="name" name="name" placeholder="Your name..." required><span>*</span><br />
+</label>
+                
+                </div>
+            <div class="form">
+                <label>
+            Email : <input type="text" id="email" name="email" placeholder="Your e-mail..." required><span>*</span><br />
+                </label>
+                </div>
+            
+            
+            <div class="form">
+                <label>
+            Phone : <input type="text" id="phone" name="phone" placeholder="Your phone Number..."  required>
+                </label><span>*</span><br />
+            </div>
+            
+            <div class="form">
+                <label>
+           <p> Message : </p><textarea id="Message" name="Message" rows="6" col="10" placeholder="Let us know what you want to ask..." required></textarea><span>*</span><br />
+                </label>
+                </div><div id="status"></div>
+            
+            <div class="form">
+            <input type="Submit" class="submit" id="btn1" value="Join Us">
+            </div>
+        
+        </form>
+       </div>
+         <div class="footer-container">
+                <a href="Home.html">Home</a>
+                <a href="About.html">About</a>
+                <a href="Services.html">Services</a>
+                <a href="Testimonial2.html">Testimonials</a>
+                <a href="ContactUs.html">Contact</a>
+                <a href="News.html">News</a>
+                <a href="Blogs.html">Blogs</a>
+                <a href="JoinUs.html">Join Us</a>
+             <div class="email" ><a href="MAILTO:mrinalrana@e-mail.com?subject=Client Message">mrinalrana@e-mail.com</a></div>
+            <p>Copyright &copy; 2018 by Tinder All Rights Reserved.</p>
+        </div>
+        
+	<script>
+
+   
+        $(document).ready(function(){
+            $('#btn1').click(function(event){
+                
+                
+                var name = $('#name').val()
+                var email = $('#email').val()
+                var phone = $('#phone').val()
+                var messages = $('#Message').val()
+                var statusElm = $('#status')
+                statusElm.empty()
+                
+                if(!email.length < 5 && !email.includes('@') && !email.includes('.')){
+                    event.preventDefault()
+                    statusElm.append('<ul>Error : </ul>')
+                    statusElm.append('<li>Email is not valid</li>')
+                }
+                
+                if(phone.length !=10 ){
+                    event.preventDefault()
+                    statusElm.append('<ul>Error : </ul>')
+                    statusElm.append('<li>Phone is not valid</li>')
+                }
+                
+                if(messages.length < 10){
+                    event.preventDefault()
+                    statusElm.append('<ul>Error : </ul>')
+                    statusElm.append('<li>Message must contain <br>10 characters</li>')
+                }
+                
+            })
+        })
+</script>
+
+        
+	    	
+    </body>
+</html>
