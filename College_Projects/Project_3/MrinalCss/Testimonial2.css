@@ -1,0 +1,230 @@
+
+#firstImage{
+    background:url('../MrinalImages/secenary1.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    box-shadow: 0 0 5px 5px #888;    
+}
+h1{
+    font-family: proxima_novabold, serif;
+    text-align: center; 
+    font-weight: 400;
+    font-size: 32px;
+    padding: 0px 20px;
+    color: darkorange;
+    font-weight: 100px;
+    animation: text-slide-up .7s linear;
+    text-shadow: 2px 2px 5px black;
+}
+.background-class{
+    min-height: 600px;
+    position: relative;
+}
+
+.text-class{
+    position:absolute; 
+    top: 50%; 
+    height: 12em; 
+    margin-top: -5em; 
+    width: 100%;
+}
+.text-class h1{
+    font-size: 45px;
+}
+.firstSection .background-class{
+    background: rgba(0,0,0,0.7);
+}
+.firstSection {
+    text-align: center; 
+    position: relative;
+    width: 100%;
+}
+@keyframes text-slide-left-heading{
+   from {
+      padding-left: 30em;
+   }
+}
+@keyframes text-slide-left{
+   from {
+      padding-left: 10em;
+   }
+}
+@keyframes text-slide-right{
+   from {
+      padding-right: 10em;
+   }
+}
+.empty-block h1{
+    color: black;
+    text-shadow: 2px 2px 5px #888;
+    font-weight: 900;
+    animation: text-slide-left-heading 1s linear;
+   
+}
+h2{
+    color: black;
+    text-shadow: 2px 2px 5px #888;
+    font-weight: 900;
+    text-align: center;  
+    margin-top: -.2em;
+    animation: text-slide-left-heading 1s linear;
+    
+   
+}
+.empty-block {
+    position: relative;
+    background: white;
+    margin-top: 10px;
+    padding-bottom: 50px;
+}
+.move {
+    padding: 80px;
+    text-align: center;
+}
+strong{
+    color: brown;
+}
+div{
+    
+    height: 15em;
+    overflow: hidden;
+}
+
+.text-class p{ 
+    font-size: 1.7em;
+    
+    animation: text-slide-left 1s linear;
+    padding: 10px 300px;
+    color: antiquewhite;
+    text-shadow: 2px 2px 5px black;
+}
+.move p, .client p{
+    text-shadow: 2px 2px 5px yellow;
+}
+
+.move{
+    font-size: 1.3em;
+    animation: text-slide-up 1s linear;
+    padding: 10px 300px;
+    color: navy;
+}
+.client { 
+    font-size: .9em;
+    animation: text-slide-up 1s linear;
+    color: darkolivegreen;
+    font-style: italic;
+    font-weight: bold;
+    color: #D2691E;
+}
+@keyframes text-slide-up{
+   from {
+      padding-top: 12em;
+   }
+}
+.prev, .next {
+    position: absolute;
+    top: 40%;
+    padding: 16px;
+    color: #888;
+    font-weight: bold;
+    font-size: 25px;
+    border-radius: 0 3px 3px 0;
+    position: absolute;
+    border-radius: 3px 0 0 3px;
+}
+.prev{
+    left: 100px;
+        animation: text-slide-left .7s linear;
+}
+.next{
+      right: 100px;
+      animation: text-slide-right .7s linear;
+}
+.prev:hover, .next:hover{
+    background-color: dimgray;
+    color: antiquewhite;
+    border-radius: 20%;
+    box-shadow: 2px 2px #888888;
+}
+.addTestimonial{
+    width: 60%;
+    background-color: brown;
+    margin-left: 15em;
+    padding-left: 100px;
+    opacity: .8;
+    font-weight: bold;
+}
+#name{
+    margin-left: 1.6em;
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+#testimonial{
+    width: 50%; 
+    height: 60%;
+    margin-top: -4em;
+    margin-left: 10em;
+}
+#btn1{
+    float: right;
+    margin-top: 15em;
+    color: red;
+    font-weight: bold;
+}
+#btn1:hover{
+    background-color: black;
+    color: antiquewhite;
+    border-radius: 10%;
+}
+.status{
+   margin-top: -10em;
+   margin-left: 45em;
+}
+.submit{
+    margin-left: 680px;
+    font-weight: bold;
+    margin-top: -7em;
+    
+}
+.footer-container a:hover{
+    background-color: navy;
+    color: burlywood;
+    border-radius: 20%;
+    box-shadow: 2px 2px #888888;
+}
+.footer-container a{
+    font-size: 20px;
+    margin-left: 100px;
+    
+    color: linen;
+}
+.footer-container{
+    background:url('../MrinalImages/secenary2.jpg'); 
+    height: 20%;
+    width: 100%;
+    animation: text-slide-left-heading 1s linear;
+    text-shadow: 2px 2px 5px black;
+    box-shadow: 0 0 5px #888;
+}
+.email{
+    text-align: center;
+    margin-right: 85px;
+    margin-top: 70px;
+}
+.footer-container p{
+    font-size: 18px;
+    font-weight: 500;
+    text-align: center;
+    margin-top: -200px;
+    color: linen;
+    text-shadow: 2px 2px 5px black;
+    
+}
+
+
+@media only screen and (max-width: 600px) {
+    body{
+        width: 100%;
+    }
+}

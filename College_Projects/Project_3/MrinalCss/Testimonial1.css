@@ -1,0 +1,165 @@
+.mainHeading {
+    width: 100%;
+    float: left;
+    background: url(../MrinalImages/image1.jpg) repeat;
+    height: 200px;
+}
+.mainHeading h3 {
+    font-size: 44px;
+    font-family: proxima_novasemibold;
+    color: #545454;
+    margin-top: 40px;
+    text-align: center;
+}
+.mainHeading p {
+    font-size: 21px;
+    font-family: proxima_novalight;
+    color: #737373;
+    line-height: 1.138;
+    max-width: 950px;
+    margin: -15px auto;
+    
+}
+.container {
+    max-width: 1500px;  
+}
+.clientTestmonial {
+    margin-top: 20px;
+    width: 100%;
+    float: left;
+    padding-bottom: 100px;
+}
+ .secondHeading h3 {
+    margin-top: 0;
+    font-size: 20px;
+    font-family: proxima_novasemibold;
+    color: #3a3939;
+    text-transform: uppercase;
+    line-height: 36px;
+    text-align: center;
+    margin-bottom: 0
+}
+.secondPara p {
+    font-size: 18px;
+    color: #6a7071;
+    font-family: proxima_novalight;
+    line-height: 20px;
+    text-align: center;
+}
+.secondParaBorder {
+    background-color: red;
+    left: 0;
+    width: 75px;
+    height: 1px;
+    right: 0;
+    margin: 13px auto 16px;
+}
+.cust-test {
+    float: left;
+    margin: 20px 0 0;
+    width: 100%
+}
+.columns{
+    columns: 3 auto;
+    display: block;
+}
+
+.testimonial_client-block {
+    display: inline-block;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.columnDesign:hover {
+    background-color: black;
+    color: wheat;
+}
+.columnDesign {
+    width: 100%;
+    float: left;
+    background-color: #f7fafc;
+    border-radius: 9px;
+    margin-bottom: 0;
+    margin-left: .5em;
+}
+.columnDesign p {
+    color: #667279;
+    font-family: proxima_novalight;
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.5;
+    padding: 20px;
+    position: relative;
+    text-align: left;
+    letter-spacing: .5px;
+    margin: 0;
+}
+.columnFooter {
+    background-color: #eaf1f5;
+    float: left;
+    margin-top: 20px;
+    padding: 0 10px;
+    width: 100%;
+}
+.columnFooter h3 {
+    font-size: 16px;
+    font-family: proxima_novabold;
+    color: #3a3939;
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 20px;
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+.columnFooter h4 {
+    font-size: 10px;
+    font-family: proxima_novaregular;
+    color: #898989;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-top: 0;
+}
+#btn1{
+    float: right;
+    margin-right: 40px;
+    margin-top: -50px;
+    color: red;
+    font-weight: bold;
+}
+#btn1:hover{
+    background-color: black;
+    color: antiquewhite;
+    border-radius: 10%;
+}
+.clientImg{
+    width: 58px;
+    height: 58px;
+    border-radius: 100%;
+    margin-left: 0px;
+    margin-top: -15px;
+}
+.clientImg img {
+    object-fit: cover;
+    border-radius: 100%;
+    border: 3px solid #eaf1f5;
+    width: 58px;
+    height: 58px;
+}
+.clientDesc {
+    margin: 0;
+    padding-left: 5px;
+    width: calc(100% - 60px);
+    float: left;
+}
+.copy_right, copy_right a{
+    background-color: #0f2028;
+    color: aliceblue;
+    float: left;
+    height: 55px;
+    text-align: center;
+    width: 100%;
+    
+}
+.copy_right a {
+    color: wheat;
+    padding-left: 60px;
+}
