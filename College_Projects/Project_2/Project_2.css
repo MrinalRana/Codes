@@ -1,0 +1,17 @@
+th{
+	background-color: lightgreen;
+}
+body{
+	background-color: Beige;
+}
+
+button{
+	border-radius: 6px;
+	
+}
+button:hover{
+	background-color: green;
+	color: antiquewhite;
+	transition: all .6s ease 0s;
+	cursor: pointer;
+}

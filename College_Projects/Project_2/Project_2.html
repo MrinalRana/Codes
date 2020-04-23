@@ -1,0 +1,68 @@
+<html lang="en">
+<head> 
+<meta charset="utf-8">
+<title>Mrinal Project 2</title>
+<link rel="stylesheet" href="Project_2.css" type="text/css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+	$("button").on("click", function(){
+		
+		//making variables of each API
+		toronto = "http://api.openweathermap.org/data/2.5/weather?q=Toronto&lang=fa&appid=e72203516aa9b3f38640f5e3ac834e3c"
+		oakville = "http://api.openweathermap.org/data/2.5/weather?q=Oakville&lang=fa&appid=e72203516aa9b3f38640f5e3ac834e3c"
+		
+		//using toronto API and calling output function for printing data
+		$.getJSON(toronto, function(data){
+			output(data);
+		});
+		
+		//using oakville API and calling output function for printing data
+		$.getJSON(oakville, function(data){
+			output(data);
+		});
+		
+		//this function will print data on HTML page
+		function output(data){
+			console.log(data);
+				
+			//this is to specify the id where to print
+			if(data.name=='Toronto'){
+				var city = '#torontoOutput'
+				$(".heading1").html("<h4>Toronto Report</h4>");
+				}
+				
+			//this is to specify the id where to print
+			if(data.name=='Oakville'){
+			var city = '#oakvilleOutput'
+			$(".heading2").html("<h4>Oakville Report</h4>");
+			}
+				
+			//passing id and printing data
+			$(city).html(
+			"<table border='1'><th>Description</th><th>Humidity</th><th>Tempreature</th><th>Wind Speed</th><tr>"
+			+"<td>"+data.weather[0].description+"</td>"
+			+"<td>"+data.main.humidity+"</td>"
+			+"<td>"+convertTemp(data.main.temp)+"&#8451;"+"</td>"
+			+"<td>"+data.wind.speed+"</td>"
+			+"</tr></table>");
+		}
+		function convertTemp(temp){
+			a = Math.round(temp - 273.15);
+			return a;
+		}
+	});
+});
+</script>
+</head>
+<body>
+<h2>Weather Report of Toronto and Oakville</h2>
+<button type="button">Show Report</button>
+<h4>Using JSON</h4>
+<h4 class="heading1"></h4>
+<p id="torontoOutput"></p>
+<h4 class="heading2"></h4>
+<p id="oakvilleOutput"></p>
+<h5>Made By: Mrinal</h5>
+</body>
+</html>
