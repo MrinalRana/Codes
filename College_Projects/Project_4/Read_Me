@@ -1,3 +1,3 @@
 Develop a multi-threaded client server database application so that multiple client applications can communicate with the 
 server application to insert and retrieve data into/from Oracle database.
-Technologies: Java, Oracle Database
+Technologies: Java, Oracle Database, NetBeans
