@@ -1,4 +1,4 @@
-Code will be uploaded soon
+Code will be updated soon. Script file is incomplete.
 
 The project entails creating a dashboard to provide analytics on membership usage of the platform. 
 As well as the data should be stored in MySQL from JSON file then imported to HBase.
