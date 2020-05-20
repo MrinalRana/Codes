@@ -1,0 +1,96 @@
+#This script will dynamically insert the data into MySQL tables and ingest into HBase
+
+#Creating database
+create database artechti;
+
+#Using database
+use artechti;
+
+#Dropping tables (if exist)
+drop table user_games;
+drop table games;
+drop table users;
+
+#Creating table 'games'
+create table games( 
+game_id varchar(10), 
+end_time datetime not null, 
+jackpot int, 
+start_time datetime not null, 
+constraint game_id_pk primary key(game_id)
+);
+
+#Creating table 'users'
+create table users( 
+user_id varchar(30), 
+competitionscore float, 
+date varchar(25), 
+displayname varchar(25), 
+game char(30), 
+lives int, 
+practicescore float, 
+shares int, 
+winnings float, 
+constraint user_id_pk primary key(user_id)
+);
+
+#Creating table 'user_games'
+create table user_games(
+user_id varchar(30), 
+game_id varchar(10), 
+amount float, 
+date datetime, 
+displayname varchar(25), 
+score float, 
+title char(30), 
+constraint user_id_fk foreign key (user_id) references users(user_id), 
+constraint game_id_fk foreign key (game_id) references games(game_id), 
+primary key(user_id, game_id, date)
+);
+
+#To show the path where to put data file
+show variables like 'secure_file%';
+
+#Loading data file
+set @file=load_file('/var/lib/mysql-files/development-structure.json');
+
+#Encoding charsets binary to utf8mb4 to read the data in the correct format
+set @data=convert(@file using utf8mb4);
+
+
+#Inserting records in game table
+insert into games 
+select game_id,end_time,jackpot,start_time 
+from ( select id,end_time,jackpot,start_time 
+from json_table(@data, '$.games' 
+columns ( nested path '$.*' 
+columns( id for ordinality,
+end_time datetime path '$.end_time', 
+jackpot int path '$.jackpot', 
+start_time datetime path '$.start_time'))) as t1) as t11 
+join ( select id,game_id 
+from json_table(json_keys(@data, '$.games'), '$[*]' 
+columns( id for ordinality,
+game_id varchar(30) path '$[0]')) as t2) as t22 
+on t11.id = t22.id;
+
+
+#Inserting users data
+insert into users 
+select user_id, competitionscore, date, displayname, game, lives, practicescore, shares, winnings 
+from ( select id,user_id 
+from json_table(json_keys(@data, '$.users'), '$[*]' 
+columns(id for ordinality, user_id varchar(30) path '$[0]')) as val1) as t1 
+join ( select id, competitionscore, date, displayname, game, lives, practicescore, shares, winnings 
+from json_table(@data, '$.users' 
+columns ( nested path '$.*' 
+columns( id for ordinality, 
+competitionscore float path '$.competitionscore',
+date varchar(25) path '$.date',
+displayname varchar(25) path '$.displayname',
+game varchar(30) path '$.game',
+lives int path '$.lives',
+practicescore float path '$.practicescore',
+shares int path '$.shares',
+winnings float path '$.winnings')))as val2) as t2 
+on t1.id=t2.id;
