@@ -1,0 +1,227 @@
+Step 1:
+drop table nfl_load;
+
+CREATE TABLE nfl_load (
+rk int, player varchar2(35), 
+team varchar2(15), comp number, 
+att number, yds number, 
+"YDS/A" number, "LONG" number, 
+td number, int number, 
+sack number, rate number, 
+"YDS/G" number);
+
+vi nfl_load.ctl
+LOAD DATA INFILE '/home/oracle/Downloads/NFL_QBs_2014.csv' 
+INTO TABLE nfl_load 
+fields terminated by "," optionally enclosed by '"' 
+(RK,PLAYER,TEAM,COMP,ATT,PCT filler,YDS,"YDS/A","LONG",TD,"INT",SACK,"RATE","YDS/G")
+
+sqlldr sh/sh@orcl control=nfl_load.ctl skip=1
+
+set pagesize 100
+set linesize 150
+col player format a15
+col team format a7
+select * from nfl_load;
+select count(*) from nfl_load;
+
+Step 2:
+drop table nfl_players;
+drop sequence id;
+
+CREATE TABLE nfl_players (
+id int CONSTRAINT nfl_player_pk PRIMARY KEY, 
+rk int, f_name varchar2(20), 
+l_name varchar2(20), pos char(2), 
+team varchar2(15), comp number, 
+att number, pct number, yds number, 
+"YDS/A" number, "LONG" number, 
+td number, int number, sack number, 
+rate number, "YDS/G" number);
+
+
+CREATE SEQUENCE id MINVALUE 1 START WITH 1 CACHE 10;
+
+INSERT INTO nfl_players 
+SELECT 
+ID.NEXTVAL, RK, 
+SUBSTR(PLAYER, 1,INSTR(PLAYER, ' ')), 
+SUBSTR(PLAYER, INSTR(PLAYER,' ')+1, LENGTH(PLAYER)-INSTR(PLAYER,' ')-4), 
+SUBSTR(PLAYER,INSTR(PLAYER,',')+2, LENGTH(PLAYER)),
+TEAM,COMP,ATT, 
+ROUND(100*(COMP/ATT),1), 
+YDS, "YDS/A", "LONG", TD, 
+"INT", SACK, "RATE", "YDS/G" 
+FROM nfl_load;
+commit;
+
+
+SELECT SUBSTR(PLAYER, 1,INSTR(PLAYER, ' ')) FROM NFL_LOAD;
+
+SELECT SUBSTR(PLAYER, INSTR(PLAYER,' ')+1, LENGTH(PLAYER)-INSTR(PLAYER,' ')-4) FROM NFL_LOAD WHERE ROWNUM <=10;
+
+SELECT SUBSTR(PLAYER,INSTR(PLAYER,',')+2, LENGTH(PLAYER)) FROM NFL_LOAD WHERE ROWNUM <=10;
+
+SELECT ROUND(100*(COMP/ATT),1) FROM NFL_LOAD WHERE ROWNUM <=10;
+
+
+Step 3:
+
+drop directory nfl_teams_dir;
+CREATE DIRECTORY nfl_teams_dir as '/home/oracle/Downloads';
+
+drop table nfl_teams;
+
+CREATE TABLE nfl_teams(
+acro CHAR(3), full_name VARCHAR2(30)
+) ORGANIZATION EXTERNAL ( 
+  TYPE oracle_loader DEFAULT DIRECTORY nfl_teams_dir ACCESS PARAMETERS ( 
+  RECORDS DELIMITED BY NEWLINE FIELDS ( 
+  acro position(1:3), full_name position(4:34) char ltrim )
+) LOCATION ('NFL_Teams.dat')
+) reject limit unlimited;
+
+select * from nfl_teams;
+SELECT COUNT(*) FROM nfl_teams;
+
+Step 4:
+
+CREATE OR REPLACE FUNCTION qb_rating
+RETURN NUMBER
+IS
+a	NUMBER;
+
+BEGIN
+	for i in (SELECT comp from nfl_players)
+	loop
+	
+	a := i.comp;
+	return a;
+end loop; 
+end; 
+/
+
+select qb_rating from nfl_players where rownum <= 5;
+drop function qb_rating;
+
+ROUND((((COMP/ATT) * 100) -30)/20,1) as t
+
+
+
+CREATE OR REPLACE FUNCTION qb_rating(id_val in number)
+RETURN NUMBER IS qb NUMBER; a NUMBER; b number; c NUMBER; d NUMBER;
+BEGIN
+
+	select (((COMP/ATT) * 100) -30)/20, ((td/att)*100)/5, 
+	(9.5-((int/att)*100))/4, ((yds/att)-3)/4 
+	into a, b, c, d 
+	from nfl_players where id = id_val; 
+	
+	IF a > 2.375 THEN a := 2.375;
+	ELSIF a < 0 THEN a:= 0;
+	END IF;
+
+	IF b > 2.375 THEN b := 2.375;
+	ELSIF b < 0 THEN b:= 0;
+	END IF;
+
+	IF c > 2.375 THEN c := 2.375;
+	ELSIF c < 0 THEN c:= 0;
+	END IF;
+
+	IF d > 2.375 THEN d := 2.375;
+	ELSIF d < 0 THEN d:= 0;
+	END IF;
+	
+	qb := (a + b + c + d)/0.06;
+
+	return round(qb,1);
+END;
+/
+
+SELECT id, QB_RATING(id) FROM NFL_PLAYERS;
+SELECT id, f_name, l_name, pos, QB_RATING(id) FROM NFL_PLAYERS;
+
+
+Step 5:
+
+conn sys/oracle as sysdba;
+drop tablespace nfl_players_tblspace;
+drop directory nfl_players_dir;
+conn sh/sh;
+drop table nfl_players_qb;
+! rm /u01/app/oracle/oradata/orcl/nfl_players_tblspace.dbf
+
+conn sys/oracle as sysdba;
+CREATE TABLESPACE nfl_players_tblspace
+DATAFILE '/u01/app/oracle/oradata/orcl/nfl_players_tblspace.dbf' SIZE 15M AUTOEXTEND ON;
+
+CREATE DIRECTORY nfl_players_dir AS '/home/oracle/Desktop/nfl_players_dir';
+GRANT read, write ON DIRECTORY nfl_players_dir TO sh;
+
+conn sh/sh;
+CREATE TABLE nfl_players_qb AS
+SELECT *  FROM nfl_players WHERE qb_rating(id) > 70.0;
+
+--SELECT table_name, tablespace_name, num_rows FROM user_tables WHERE tablespace_name IN ('NFL_PLAYERS_TBLSPACE', 'USERS');
+SELECT rk, f_name || l_name AS Full_name, qb_rating(id) from nfl_players_qb;
+
+SELECT COUNT(*) FROM nfl_players_qb;
+SELECT COUNT(*) FROM nfl_players WHERE qb_rating(id) > 70.0;
+
+! rm -R -f /home/oracle/Desktop/nfl_players_dir
+! mkdir /home/oracle/Desktop/nfl_players_dir
+! expdp sh/sh@orcl DIRECTORY=nfl_players_dir TABLES=nfl_players_qb DUMPFILE=nfl_players_qb.dmp
+! impdp sh/sh@orcl DIRECTORY=nfl_players_dir DUMPFILE=nfl_players_qb.dmp TABLESPACES=nfl_players_tblspace
+
+
+Step 6:
+
+DROP TABLE qb_grt_85;
+DROP TABLE qb_bwt_60_85;
+DROP TABLE qb_less_60;
+
+CREATE TABLE qb_grt_85 AS SELECT * FROM nfl_players WHERE 1=0;
+CREATE TABLE qb_bwt_60_85 AS SELECT * FROM nfl_players WHERE 1=0;
+CREATE TABLE qb_less_60 AS SELECT * FROM nfl_players WHERE 1=0;
+
+INSERT ALL
+WHEN qb_rating(id) > 85 THEN
+INTO qb_grt_85 
+WHEN qb_rating(id) < 85 AND qb_rating(id) > 60 THEN
+INTO qb_bwt_60_85
+WHEN qb_rating(id) < 60 THEN
+INTO qb_less_60
+SELECT * FROM nfl_players;
+
+SELECT COUNT(*) FROM qb_grt_85;
+SELECT COUNT(*) FROM nfl_players WHERE qb_rating(id) > 85;
+SELECT * FROM qb_grt_85;
+SELECT COUNT(*) FROM qb_bwt_60_85;
+SELECT COUNT(*) FROM nfl_players WHERE qb_rating(id) < 85 AND qb_rating(id) > 60;
+SELECT * FROM qb_bwt_60_85;
+SELECT COUNT(*) FROM qb_less_60;
+SELECT COUNT(*) FROM nfl_players WHERE qb_rating(id) < 60;
+SELECT * FROM qb_less_60;
+
+
+Step 7:
+
+DROP TABLE ordby_yds_nfl_players;
+DROP SEQUENCE "rank_yds/g";
+
+CREATE SEQUENCE "rank_yds/g" MINVALUE 1 START WITH 1 CACHE 10;
+
+CREATE TABLE ordby_yds_nfl_players (
+"rank_yds/g", rk, f_name, 
+l_name, pos, team, comp, 
+att, pct, yds, "YDS/A" , "LONG", 
+td, int, sack, rate, "YDS/G" ) AS 
+SELECT "rank_yds/g".NEXTVAL, t.* from 
+(select rk, f_name, l_name, pos, team, comp, att, pct, yds, "YDS/A", "LONG", td, int, sack, rate, "YDS/G" 
+FROM nfl_players ORDER BY "YDS/G" DESC)  t;
+
+SELECT COUNT(*) FROM ordby_yds_nfl_players;
+SELECT "rank_yds/g", "YDS/G" FROM ordby_yds_nfl_players;
+SELECT * FROM ordby_yds_nfl_players;
+ 
