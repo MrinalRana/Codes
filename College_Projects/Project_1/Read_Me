@@ -1,0 +1,70 @@
+Data warehouse project:
+Description: Work on NFL Quarterback statistics gathered during a game. Calculate the rating for each quarterback to determine how well a quarterback or passer is performing
+             The NFL rates its passers for statistical purposes against a fixed performance standard based on statistical achievements of all qualified pro passers since 1960
+             The current system replaced one that rated passers in relation to their position in a total group based on various criteria.
+             Working with the Extraction and Transportation utilities included with Oracle
+             Environment: SQL*Loader, Data Pump, transportable tablespaces, PL/SQL functions, sequences, multitable inserts and external tables
+
+Step 1: Using SQL*Loader to load data to a staging table
+        Steps:
+        A flat file that is based on the current 2014 NFL Quarterbacks is given
+        Create a table to store the data 
+        Find out figure what data types are required for the various fields
+        Convert to a csv file to be uploaded to the database
+        Load the file containing quarterback statistics; file contains header, create a SQL Loader control file to get it done
+        
+Step 2: Loading data into a regular table	
+        Steps:
+        Create a second table to store the records (treat this table as a staging table load to the main table) that will also contain a numeric value that can be the 
+        surrogate primary key for the table, define a sequence in Oracle to provide the surrogate primary key value for each record you insert into the table
+        This table should have separate columns for the quarterback’s first name and the quarterback’s last name in addition to a separate column for the player’s position
+        (Building three columns out of one)
+        Perform a calculation to determine the Completion Percentage
+        
+Step 3: Loading data into an External Table
+        Steps:
+        Second file which contains a list of the teams that are in the NFL (National Football League) is to be stored in an external table
+        
+Step 4: Calculate the QB Rating
+        Steps:
+        Create a PL/SQL user defined function to perform the calculation for the quarterback rating
+        This function is to be added to the above instructions to perform this calculation as the data is being loaded
+        Four categories are used as a basis for compiling a rating:
+          •	Percentage of completions per attempt
+          •	Percentage of touchdown passes per attempt
+          •	Percentage of interceptions per attempt
+          •	Yards per Attempt
+        To make the rating more understandable, the point rating is then converted into a scale of 100. In rare cases, where statistical performance has been superior, 
+        it is possible for a passer to surpass a 100 rating. 
+        For example, take Steve Young's record-setting season in 1994 when he completed 324 of 461 passes for 3,969 yards, 35 touchdowns, and 10 interceptions.
+        The four calculations would be:
+          •	Completions per Attempt — (((Completions / Attempts) * 100) - 30) / 20. (call this A).
+          •	Touchdowns Per Attempt — ((TDs / Attempts) * 100) / 5  ( call this B)
+          •	Interceptions per Attempt – (9.5 – ((Interceptions / Attempts)) / 4 (call this C)
+          •	Yards per Attempt – ((Yards / Attempts) – 3 / 4 (call this D)
+        The rating is calculated by taking the values of A, B, C and D, adding these together and dividing. .06
+        (A + B + C + D+) / .06
+        The values of A,B, C, and D cannot be greater than 2.375 or less than 0.  If the values are outside these bounds, set the value to 2.375 for the upper limit and to 0 
+        for the lower limit.
+        Furthermore, A, B, C, or D cannot be less than zero or larger than 2.375. Raise or lower the component to meet the limit.
+
+Step 5: Loading data from Transportable Tablespace
+        Steps:
+        Create a tablespace to hold the data from your table using CTAS
+        Use NFLQBs2014 data and move any records where the qb rating is greater than 70.0 to the new table you have just created
+        Use the expdp to export this data to a dump file
+        Move the data and the dump file to another directory on your drive
+        Verify that the data is successfully copied
+        Use the impdp to make the tablespace accessible to your database
+        
+Step 6: Multitable Insert
+        Steps:
+        Create three tables
+          •	To hold the quarterbacks who have a rating above 85
+          •	To store the quarterbacks who have a rating less than 85 but greater than 60
+          •	To store the quarterbacks who have a rating below 60
+          
+Step 7: Create a New Table where the data is ordered by the QB passer rating
+        Steps:
+        Create a new table to store the data in order by yards placed 
+        Use a sequence to show a ranking number starting at 1 for each row in this table
